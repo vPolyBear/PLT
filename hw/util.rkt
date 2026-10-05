@@ -57,7 +57,7 @@
     (cond
       ((null? lst) left_part)
       ((eq? (car (car lst)) key) (append left_part (list (list key value)) (cdr lst)))
-      (else (update_pair (append left_part (list (list key value))) (cdr lst) key value))
+      (else (update_pair (append left_part (list (car lst))) (cdr lst) key value))
       )
     )
   )
@@ -125,5 +125,53 @@
       )
     )
   )
+
+(define
+  is_valid_math_op
+    (lambda
+      (op)
+        (cond
+          ((equal? '+ op) #t)
+          ((equal? '- op) #t)
+          ((equal? '* op) #t)
+          ((equal? '/ op) #t)
+          ((equal? '// op) #t)
+          ((equal? '% op) #t)
+          (else #f)
+        )
+    )
+)
+
+;create a function that can used to determine what math should use based on the symbol operator, and applies on 
+; the operand parsed into the function
+(define
+  do_math
+    (lambda
+      (op left_operand right_operand)
+      (cond
+        ((eq? '+ op) (+ left_operand right_operand))
+        ((eq? '- op) (- left_operand right_operand))
+        ((eq? '* op) (* left_operand right_operand))
+        ((eq? '/ op) (/ left_operand right_operand))
+        ((eq? '// op) (quotient left_operand right_operand))
+        ((eq? '% op) (modulo left_operand right_operand))
+      )
+    )
+)
+
+(define
+  create_pair_list
+    (lambda (lst_ret lst1 lst2)
+      (if
+        (or (null? lst1) (null? lst2))
+          lst_ret
+          (create_pair_list (cons (list (car lst1) (car lst2)) lst_ret) (cdr lst1) (cdr lst2))
+      )
+    )
+)
+
+(define update_base_environment
+  (lambda (new_env)
+    (set! environment new_env)))
 
 (provide (all-defined-out))
